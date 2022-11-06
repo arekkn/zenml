@@ -7,7 +7,7 @@ import is_cat
 from PIL import Image
 import requests
 from io import BytesIO
-from embeddings_pipeline import run_2
+
 @st.cache
 def load_image(img_file):
     img=Image.open(img_file)

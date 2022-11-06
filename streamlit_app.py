@@ -34,7 +34,7 @@ def find_closest_img(img):
 
 @st.cache
 def save_new_embedings(img_path):
-    embeddings_df = pd.read_pickle("embeddings.pkl")
+    embeddings_df = pd.read_pickle("embeddings.pkl",compression="xz")
     resnet18_weights = torchvision.models.ResNet18_Weights.DEFAULT
     resnet18_model = torchvision.models.resnet18(weights=resnet18_weights)
     resnet34_weights = torchvision.models.ResNet34_Weights.DEFAULT

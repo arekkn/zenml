@@ -52,8 +52,6 @@ def save_new_embedings(img_path):
         "resnet34_embeddings":[eval(img, resnet34_model, resnet34_weights)],
         "resnet50_embeddings":[eval(img, resnet50_model, resnet50_weights)],
         "vit_embeddings": [eval_vit(img, embedding_model, feature_extractor)]})
-    # output = pd.concat([embeddings_df, result],ignore_index=True)
-    # output.to_pickle("./embeddings.pkl",compression="xz")
     return reasult
 
 
@@ -65,16 +63,15 @@ def scale_photo(img):
 def main():
 
     st.markdown("# Welcome to Find your soulcat!")
-    st.text("Upload your cat picture and see the magic")
+    st.text("Upload your cat picture and see the magic!")
     img_file = st.file_uploader("",type=["png","jpg","jpeg"])
     if img_file is not None:
-        st.text("So this is your picture")
-        #wyswietla
+        st.text("So this is your picture.")
+
         st.image(load_image(img_file))
-        #otwarte
+
         cat = is_cat.is_cat(load_image(img_file))
-        st.write(cat)
-        #####dodaje
+
         img_path=os.path.join("cats/", img_file.name)
         with open(img_path, "wb") as f:
             f.write(img_file.getbuffer())
@@ -84,14 +81,12 @@ def main():
         recomendation_list = find_closest_img(reasult)
         #
         if not cat:
-            st.text("And our model says he doesn't see a cat in this photo, instead he sees:")
+            st.text("And our model says he doesn't see a cat in this picture, instead he sees:")
             not_cat=is_cat.what_is(load_image(img_file))
-            st.write(not_cat)
-            st.write(f"{not_cat.iloc[0,2]}: {100 *not_cat.iloc[0,1]:.1f}%")
-
-            st.write(not_cat)
-        st.text("And our model ")
-        st.text('Below are four cats similar to your cat')
+            st.write(f"{not_cat.iloc[0,2]} with {100 *not_cat.iloc[0,1]:.1f}% certainty.")
+        else:
+            st.text("And our model sees cat on your picture.")
+        st.text('Below are four cats similar to your cat.')
         
         col1, col2,col3= st.columns(3)
 
@@ -128,9 +123,8 @@ def main():
         byte_im4 = buf4.getvalue()
         col1.download_button(label='Download cat 4',data=byte_im4,file_name="cat4.jpg",mime="image/jpeg")
         
-        st.text('Please send feedback')
-        message = st.text_input('message')
-        
+        st.write("WOW!🤩😲🤩")
+        st.write("Now try with another cat or maybe with something else, maybe even your selfie.")
 
     st.markdown("# End of site bye bye!")
 

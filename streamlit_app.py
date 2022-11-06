@@ -86,7 +86,7 @@ def main():
             st.write(f"{not_cat.iloc[0,2]} with {100 *not_cat.iloc[0,1]:.1f}% certainty.")
         else:
             st.text("And our model sees cat on your picture.")
-        st.text('Below are four cats similar to your cat.')
+        st.text('Below are four cats similar to your picture.')
         
         col1, col2,col3= st.columns(3)
 

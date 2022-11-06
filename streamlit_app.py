@@ -123,11 +123,12 @@ def main():
         byte_im4 = buf4.getvalue()
         col1.download_button(label='Download cat 4',data=byte_im4,file_name="cat4.jpg",mime="image/jpeg")
         
-        st.write("WOW!🤩😲🤩")
+
         st.markdown("## WOW!🤩😲🤩")
         st.write("Now try with another cat or maybe with something else, maybe even your selfie.")
 
-    st.markdown("# End of site bye bye!")
+    st.markdown("### Site by WUT's students for ZenML's Month of MLOps.")
+    st.markdown("### See our full project on [github](https://github.com/arekkn/zenml)")
 
 if __name__ == '__main__':
     main()

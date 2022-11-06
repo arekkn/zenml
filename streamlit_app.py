@@ -68,8 +68,8 @@ def main():
         st.image(load_image(img_file))
         st.write(is_cat.is_cat(load_image(img_file)))
         #####dodaje
-        img_path=os.path.join("cats/", img_file.name, "wb")
-        with open(img_path) as f:
+        img_path=os.path.join("cats/", img_file.name)
+        with open(img_path, "wb") as f:
             f.write(img_file.getbuffer())
         save_new_embedings(img_path)
         recomendation_list = find_closest_img(img_path)

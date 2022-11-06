@@ -64,6 +64,13 @@ def eval(cat, embedding_model, weights):
     embedding = embedding_model(transformer(cat).unsqueeze(0)).squeeze(0).detach().numpy()
     return embedding
 
+def eval_vit(cat, model, feature_extractor):
+    encoding = feature_extractor(images=cat, return_tensors="pt")
+    pixel_values = encoding['pixel_values']
+    outputs = model(pixel_values, output_hidden_states=True)
+    embedding = outputs.hidden_states[-1].squeeze(0)[0, :].detach().numpy()
+    return embedding
+
 
 if __name__ == '__main__':
     get_cats()

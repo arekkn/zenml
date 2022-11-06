@@ -31,7 +31,7 @@ def find_closest_img(reasult):
         d[d.argmin()] = float("inf")
         idx = d.argmin()
         result_img_list.append(df.iloc[idx]["img_paths"])
-    print(result_img_list)
+    del df
     return result_img_list
 
 @st.cache
@@ -64,7 +64,7 @@ def scale_photo(img):
 
 def main():
 
-    st.markdown("# Welcome to Find your soul cat!")
+    st.markdown("# Welcome to Find your soulcat!")
     st.text("Upload your cat picture and see the magic")
     img_file = st.file_uploader("",type=["png","jpg","jpeg"])
     if img_file is not None:
@@ -85,9 +85,13 @@ def main():
         #
         if not cat:
             st.text("And our model says he doesn't see a cat in this photo, instead he sees:")
-            st.write(is_cat.what_is(load_image(img_file)))
+            not_cat=is_cat.what_is(load_image(img_file))
+            st.write(not_cat)
+            st.write(f"{not_cat.iloc[0,2]}: {100 *not_cat.iloc[0,1]:.1f}%")
+
+            st.write(not_cat)
         st.text("And our model ")
-        st.text('Below are six cats similar to your cat')
+        st.text('Below are four cats similar to your cat')
         
         col1, col2,col3= st.columns(3)
 

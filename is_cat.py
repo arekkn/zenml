@@ -44,4 +44,4 @@ def what_is(img):
     result.reset_index(inplace=True)
     result.columns=['index','procent','nazwa']
     result=result.sort_values(by=['procent'],ascending=False)
-    return result.head(10)
+    return result.head(1)

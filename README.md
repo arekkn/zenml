@@ -44,7 +44,7 @@ The model that worked best for our task was a vision transformer (pretrained on 
 
 ### Frontend app
 
-We used Streamlit for the demo app. It is free and allows for a simple presentation of what we accomplished during the ZenML month of MLOps competition.
+We used Streamlit for the demo app. It is free and allows for a simple presentation of what we accomplished during the ZenML month of MLOps competition.[Streamlit-app](https://arekkn-zenml-streamlit-app-htd0eo.streamlit.app/)
 
 ### Authors
 - [Arkadiusz Kniaź](https://github.com/arekkn)

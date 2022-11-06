@@ -10,4 +10,4 @@ def merge_embeddings(names: list, resnet18_embeddings: list, resnet34_embeddings
         "resnet50_embeddings":resnet50_embeddings,
         "resnet101_embeddings":resnet101_embeddings,
         "resnet152_embeddings":resnet152_embeddings})
-    result.to_pickle("./embeddings.pkl")
+    result.to_pickle("./embeddings.pkl", compression="xz")

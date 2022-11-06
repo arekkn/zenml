@@ -10,6 +10,7 @@ from io import BytesIO
 ####dodaje
 from utils import eval
 from utils import eval_vit
+from utils import crop_and_scale
 from transformers import ViTFeatureExtractor
 from transformers import ViTForImageClassification
 import torchvision.models
@@ -21,20 +22,22 @@ def load_image(img_file):
  
 ###dodaje   
 @st.cache
-def find_closest_img(img):
+def find_closest_img(reasult):
     df = pd.read_pickle("./embeddings.pkl", compression="xz") 
-    our_cat = df.loc[df["img_paths"]==img]
+    our_cat = reasult
     result_img_list = []
     for col in df.columns[1:]:
         d = np.stack((df[col].to_numpy() - our_cat[col].to_numpy())**2).sum(axis=1)
-        d[d==0] = 1000
+        d[d.argmin()] = float("inf")
         idx = d.argmin()
         result_img_list.append(df.iloc[idx]["img_paths"])
+    print(result_img_list)
     return result_img_list
 
 @st.cache
 def save_new_embedings(img_path):
-    embeddings_df = pd.read_pickle("embeddings.pkl",compression="xz")
+    img= crop_and_scale(Image.open(img_path))
+    # embeddings_df = pd.read_pickle("embeddings.pkl",compression="xz")
     resnet18_weights = torchvision.models.ResNet18_Weights.DEFAULT
     resnet18_model = torchvision.models.resnet18(weights=resnet18_weights)
     resnet34_weights = torchvision.models.ResNet34_Weights.DEFAULT
@@ -43,14 +46,15 @@ def save_new_embedings(img_path):
     resnet50_model = torchvision.models.resnet50(weights=resnet50_weights)
     feature_extractor = ViTFeatureExtractor('google/vit-base-patch16-224')
     embedding_model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
-    result = pd.DataFrame({
+    reasult = pd.DataFrame({
         "img_paths":[img_path],
-        "resnet18_embeddings":[eval(Image.open(img_path), resnet18_model, resnet18_weights)],
-        "resnet34_embeddings":[eval(Image.open(img_path), resnet34_model, resnet34_weights)],
-        "resnet50_embeddings":[eval(Image.open(img_path), resnet50_model, resnet50_weights)],
-        "vit_embeddings": [eval_vit(Image.open(img_path), embedding_model, feature_extractor)]})
-    output = pd.concat([embeddings_df, result])
-    output.to_pickle("./embeddings.pkl")
+        "resnet18_embeddings":[eval(img, resnet18_model, resnet18_weights)],
+        "resnet34_embeddings":[eval(img, resnet34_model, resnet34_weights)],
+        "resnet50_embeddings":[eval(img, resnet50_model, resnet50_weights)],
+        "vit_embeddings": [eval_vit(img, embedding_model, feature_extractor)]})
+    # output = pd.concat([embeddings_df, result],ignore_index=True)
+    # output.to_pickle("./embeddings.pkl",compression="xz")
+    return reasult
 
 
 @st.cache
@@ -65,16 +69,21 @@ def main():
     img_file = st.file_uploader("",type=["png","jpg","jpeg"])
     if img_file is not None:
         st.text("So this is your picture")
+        #wyswietla
         st.image(load_image(img_file))
-        st.write(is_cat.is_cat(load_image(img_file)))
+        #otwarte
+        cat = is_cat.is_cat(load_image(img_file))
+        st.write(cat)
         #####dodaje
         img_path=os.path.join("cats/", img_file.name)
         with open(img_path, "wb") as f:
             f.write(img_file.getbuffer())
-        save_new_embedings(img_path)
-        recomendation_list = find_closest_img(img_path)
-
-        if not is_cat.is_cat(load_image(img_file)):
+        #
+        reasult=save_new_embedings(img_path)
+        #
+        recomendation_list = find_closest_img(reasult)
+        #
+        if not cat:
             st.text("And our model says he doesn't see a cat in this photo, instead he sees:")
             st.write(is_cat.what_is(load_image(img_file)))
         st.text("And our model ")

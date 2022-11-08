@@ -15,13 +15,13 @@ from transformers import ViTFeatureExtractor
 from transformers import ViTForImageClassification
 import torchvision.models
 
-@st.cache(max_entries=1)
+@st.cache(ttl=30)
 def load_image(img_file):
     img=Image.open(img_file)
     return img
  
 ###dodaje   
-@st.cache(max_entries=1)
+@st.cache(ttl=30)
 def find_closest_img(reasult):
     df = pd.read_pickle("./embeddings.pkl", compression="xz") 
     our_cat = reasult
@@ -34,7 +34,7 @@ def find_closest_img(reasult):
     del df
     return result_img_list
 
-@st.cache(max_entries=1)
+@st.cache(ttl=30)
 def save_new_embedings(img_path):
     img= crop_and_scale(Image.open(img_path))
     # embeddings_df = pd.read_pickle("embeddings.pkl",compression="xz")
@@ -55,7 +55,7 @@ def save_new_embedings(img_path):
     return reasult
 
 
-@st.cache(max_entries=1)
+@st.cache(ttl=30)
 def scale_photo(img):
     scaled_img = img.resize((224, 224))
     return scaled_img

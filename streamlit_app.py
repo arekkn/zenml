@@ -64,7 +64,7 @@ def main():
 
     st.markdown("# Welcome to Find your soulcat!")
     st.text("Upload your cat picture and see the magic!")
-    img_file = st.file_uploader("",type=["png","jpg","jpeg"])
+    img_file = st.file_uploader(label=" ",type=["png","jpg","jpeg"],label_visibility="hidden")
     if img_file is not None:
         st.text("So this is your picture.")
 
